@@ -14,7 +14,6 @@
         button:hover { background-color: #2b6cb0; }
         .feed { height: 250px; overflow-y: auto; border: 1px solid #cbd5e0; padding: 10px; background: #f7fafc; border-radius: 4px; }
         
-        /* Визуальное различие сообщений (Задания 1, 2, 3, 5) */
         .msg { margin: 4px 0; padding: 4px 8px; border-radius: 4px; }
         .msg-broadcast { background-color: #edf2f7; }
         .msg-room { background-color: #feebc8; border-left: 4px solid #dd6b20; } /* Оранжевый маркер для комнат */
@@ -29,25 +28,25 @@
     <div class="panel">
         <h2>Управление панелью</h2>
         
-        <!-- Задание 3 & 4: Статусы и Счётчик -->
+        <!-- Статусы и Счётчик -->
         <div class="status-bar">
             Статус соединения: <span id="connectionStatus" style="color: red;">Отключено</span> | 
             Онлайн пользователей: <span id="onlineCount">0</span>
         </div>
         
-        <!-- Задание 5: Свой ID -->
+        <!-- Свой ID -->
         <div class="section">
             <strong>Ваш Connection ID:</strong> <span id="myId" style="color: #2b6cb0; word-break: break-all;">Ожидание...</span>
         </div>
 
-        <!-- Задание 1: Общемировой чат -->
+        <!-- Общемировой чат -->
         <div class="section">
             <h3>1. Общий чат (Широковещание)</h3>
             <input type="text" id="broadcastInput" placeholder="Текст общего сообщения..." style="width: 70%;">
             <button id="sendBroadcastBtn">Отправить всем</button>
         </div>
 
-        <!-- Задание 2: Управление комнатами -->
+        <!-- Управление комнатами -->
         <div class="section">
             <h3>2. Управление комнатами</h3>
             <input type="text" id="roomInput" placeholder="Имя комнаты (например, alpha)">
@@ -59,7 +58,7 @@
             <button id="sendRoomBtn">Отправить в комнату</button>
         </div>
 
-        <!-- Задание 5: Адресная отправка -->
+        <!-- Адресная отправка -->
         <div class="section">
             <h3>3. Приватные сообщения</h3>
             <input type="text" id="privateTargetInput" placeholder="ID получателя (Connection ID)" style="width: 95%;"><br>
@@ -67,7 +66,7 @@
             <button id="sendPrivateBtn">Отправить приватно</button>
         </div>
 
-        <!-- Задание 3 & 5: Внешние HTTP Запросы -->
+        <!-- Внешние HTTP Запросы -->
         <div class="section">
             <h3>4. Инициация внешних HTTP API запросов</h3>
             <button id="httpSystemBtn" style="background-color: #4a5568;">HTTP POST: Системное сообщение</button>
@@ -116,9 +115,7 @@
         appendLog(`Соединение установлено. Ваш ID: ${generatedId}`, "msg-info");
     }
 
-    // --- Обработчики кликов на кнопки панели ---
-
-    // Кнопка: Отправить всем (Задание 1)
+    // Отправить всем
     document.getElementById("sendBroadcastBtn").addEventListener("click", () => {
         const input = document.getElementById("broadcastInput");
         if (!input.value.trim()) return;
@@ -126,7 +123,7 @@
         input.value = "";
     });
 
-    // Кнопка: Войти в комнату (Задание 2)
+    // Войти в комнату
     document.getElementById("joinRoomBtn").addEventListener("click", () => {
         const roomInput = document.getElementById("roomInput");
         if (!roomInput.value.trim()) return;
@@ -135,7 +132,7 @@
         appendLog(`Вы успешно вошли в комнату "${currentRoom}"`, "msg-info");
     });
 
-    // Кнопка: Выйти из комнаты (Задание 2)
+    // Выйти из комнаты
     document.getElementById("leaveRoomBtn").addEventListener("click", () => {
         if (!currentRoom) return;
         appendLog(`Вы вышли из комнаты "${currentRoom}"`, "msg-info");
@@ -143,7 +140,7 @@
         currentRoomText.innerText = "Нет";
     });
 
-    // Кнопка: Отправить сообщение в текущую комнату (Задание 2)
+    // Отправить сообщение в текущую комнату
     document.getElementById("sendRoomBtn").addEventListener("click", () => {
         const input = document.getElementById("roomMsgInput");
         if (!input.value.trim() || !currentRoom) {
@@ -154,7 +151,7 @@
         input.value = "";
     });
 
-    // Кнопка: Отправить приватное сообщение (Задание 5)
+    // Отправить приватное сообщение
     document.getElementById("sendPrivateBtn").addEventListener("click", () => {
         const targetInput = document.getElementById("privateTargetInput");
         const msgInput = document.getElementById("privateMsgInput");
@@ -164,23 +161,21 @@
         msgInput.value = "";
     });
 
-    // Кнопка: HTTP POST Системное сообщение (Задание 3)
+    // HTTP POST Системное сообщение
     document.getElementById("httpSystemBtn").addEventListener("click", () => {
         appendLog(`[Система]: Плановые технические работы через 10 минут!`, "msg-system");
     });
 
-    // Кнопка: HTTP POST Внешнее уведомление в комнату (Задание 5)
+    // HTTP POST Внешнее уведомление в комнату
     document.getElementById("httpRoomBtn").addEventListener("click", () => {
         const rName = currentRoom || "alpha";
         appendLog(`[Комната ${rName}] System_External: Внешний датчик API зафиксировал активность!`, "msg-room");
     });
 
-    // Кнопка: Очистить лог на экране
+    // Очистить лог на экране
     document.getElementById("clearFeedBtn").addEventListener("click", () => {
         feed.innerHTML = "";
     });
-
-    // Стартуем интерфейс сразу после загрузки страницы
     startCenter();
 </script>
 </body>
