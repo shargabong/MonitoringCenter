@@ -19,7 +19,6 @@ window.signalR = (function() {
         this.connectionId = "ID_" + Math.floor(Math.random() * 10000);
         this.handlers = {};
 
-        // Методы обратного вызова жизненного цикла
         this.onreconnectingCallback = function() {};
         this.onreconnectedCallback = function() {};
         this.oncloseCallback = function() {};
@@ -34,15 +33,12 @@ window.signalR = (function() {
 
         this.start = function() {
             return new Promise(function(resolve, reject) {
-                // Переводим http/https в ws/wss протокол для вебсокетов
                 var wsUrl = self.url.replace("http://", "ws://").replace("https://", "wss://") + "/negotiate?negotiateVersion=1";
                 
-                // Пробуем подключиться напрямую по вебсокету к хабу
                 var directWsUrl = self.url.replace("http://", "ws://").replace("https://", "wss://");
                 self.socket = new WebSocket(directWsUrl);
 
                 self.socket.onopen = function() {
-                    // Имитируем обновление онлайна при успешном коннекте
                     if (self.handlers["updateonlinecount"]) {
                         self.handlers["updateonlinecount"](1);
                     }
@@ -61,7 +57,6 @@ window.signalR = (function() {
                             self.handlers[target].apply(null, message.arguments || []);
                         }
                     } catch (e) {
-                        // Игнорируем не-JSON системные пакеты SignalR ping
                     }
                 };
 
@@ -74,14 +69,12 @@ window.signalR = (function() {
         this.invoke = function(methodName, varArgs) {
             var args = Array.prototype.slice.call(arguments, 1);
             if (self.socket && self.socket.readyState === WebSocket.OPEN) {
-                // Отправляем стандартный фрейм сообщения в хаб ASP.NET Core
                 self.socket.send(JSON.stringify({
                     target: methodName,
                     arguments: args
                 }));
             }
             
-            // Локальный фидбек для интерфейса комнат
             if (methodName === "JoinRoom" && self.handlers["joinedroom"]) {
                 self.handlers["joinedroom"](args[0]);
             }
